@@ -1,32 +1,26 @@
+DateHelper = require('./date-helper');
+
+const dateHelper = new DateHelper();
+
 const CalculateDueDate = (reportedTime, tournaroundTime) => {
-    console.log(reportedTime, tournaroundTime);
-
     
-    const worktimeStarts = 9;
-    const worktimeEnds = 17;
-
-    const endTimeHours = reportedTime.getUTCHours() + tournaroundTime;
+    if (!dateHelper.isInWorkTime(reportedTime)) {
+        throw 'The reported time is not in work time';
+    }
+    
+    const endTime = dateHelper.calculateEndTime(reportedTime, tournaroundTime)
      
-    if (endTimeHours > worktimeEnds) {
-        let newDate;
-        if (reportedTime.getDay() === 5) {
-            newDate = reportedTime.getUTCDate() + 3; 
-        } else {
-            newDate = reportedTime.getUTCDate() + 1;
-        }
-        reportedTime.setUTCDate(newDate);
-        reportedTime.setUTCHours(worktimeStarts);
+    if (dateHelper.isFinishedInStartDay(endTime)) {
+        return new Date(reportedTime.setUTCHours(endTime));
+    }else {
+        const newStartTime = dateHelper.calculateNewStartTime(reportedTime);
 
-        const newStartTime = reportedTime;
+        const remainingHours = dateHelper.calculateRemainingHours(endTime);
 
-
-        const remainingHours = endTimeHours - worktimeEnds;
         return CalculateDueDate(newStartTime, remainingHours);
-        
-    } else {
-        return new Date(reportedTime.setUTCHours(endTimeHours));
     }
     
     
 }
 
+console.log(CalculateDueDate(new Date(Date.UTC(2019,1,26,10)),56));
