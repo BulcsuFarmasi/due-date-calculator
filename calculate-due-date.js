@@ -22,5 +22,3 @@ const CalculateDueDate = (reportedTime, tournaroundTime) => {
     
     
 }
-
-console.log(CalculateDueDate(new Date(Date.UTC(2019,1,26,10)),56));
