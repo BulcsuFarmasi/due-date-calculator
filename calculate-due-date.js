@@ -3,8 +3,6 @@ DateHelper = require('./date-helper');
 const dateHelper = new DateHelper();
 
 const CalculateDueDate = (submitDate, turnaroundTime) => {
-
-    console.log(submitDate);
     
 
     if (!dateHelper.isDate(submitDate)) {
