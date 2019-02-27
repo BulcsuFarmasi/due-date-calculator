@@ -6,51 +6,55 @@ class DateHelper {
     }
 
     calculateEndTime (startTime, addTime) {
-        return startTime.getUTCHours() + addTime;
+        return startTime.getHours() + addTime;
     }
 
     calculateNewStartTime (startTime) {
 
         const nextDay = this.calculateNextDay(startTime)
-        startTime.setUTCDate(nextDay);
-        startTime.setUTCHours(this.workTimeStarts);
+        startTime.setDate(nextDay);
+        startTime.setHours(this.workTimeStarts);
 
         return startTime;
     }
 
-    calculateNextDay (time) {
+    calculateNextDay (date) {
         const weekEnd = 3;
         const nextDay = 1
 
-        return (this.isFriday(time)) ?  time.getUTCDate() + weekEnd 
-                                          :  time.getUTCDate() + nextDay;
+        return (this.isFriday(date)) ?  date.getDate() + weekEnd 
+                                          :  date.getDate() + nextDay;
     }
 
     calculateRemainingHours (endTime) {
         return endTime - this.workTimeEnds;
     }
 
+    isDate (date) {
+        return date instanceof Date
+    }
+
     isFinishedInStartDay (endTime) {
         return endTime < this.workTimeEnds;
     }
 
-    isFriday (time) {
+    isFriday (date) {
         const friday = 5;
-        return time.getUTCDay() === friday;
+        return date.getDay() === friday;
     }
 
-    isWorkDay(time) {
+    isWorkDay(date) {
         const weekEndDays = [6,0];
 
-        return weekEndDays.indexOf(time.getUTCDay()) === -1;
+        return weekEndDays.indexOf(date.getDay()) === -1;
     }
 
-    isWorkHours(time) {
-        return this.workTimeStarts <= time.getUTCHours() && time.getUTCHours() < this.workTimeEnds;
+    isWorkHours(date) {
+        return this.workTimeStarts <= date.getHours() && date.getHours() < this.workTimeEnds;
     }
 
-    isInWorkTime (time) {
-        return this.isWorkDay(time) && this.isWorkHours(time)
+    isInWorkTime (date) {
+        return this.isWorkDay(date) && this.isWorkHours(date)
     }
 
 }
